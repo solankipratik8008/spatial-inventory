@@ -106,3 +106,7 @@ SpatialInventoryManager/
 └── Utilities/
     ├── Constants.swift
     └── Extensions.swift
+
+
+<img width="946" height="2048" alt="image" src="https://github.com/user-attachments/assets/84b908ee-f4d0-41f2-9dad-c6e155ab2f4c" />
+
