@@ -1,0 +1,309 @@
+# 📦 Spatial Inventory Management
+
+> An AR-powered inventory management iOS app built with Swift, SwiftUI, ARKit, and RealityKit.
+
+![Swift](https://img.shields.io/badge/Swift-5.9-orange?style=flat-square&logo=swift)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-5.0-blue?style=flat-square&logo=apple)
+![ARKit](https://img.shields.io/badge/ARKit-6.0-teal?style=flat-square&logo=apple)
+![iOS](https://img.shields.io/badge/iOS-17%2B-lightgrey?style=flat-square&logo=apple)
+![Architecture](https://img.shields.io/badge/Architecture-MVVM-purple?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+
+---
+
+## 📱 Overview
+
+**Spatial Inventory** lets you manage physical inventory items using augmented reality.
+Place floating AR label cards directly onto real-world surfaces, track stock levels,
+search and filter your inventory, and manage everything from a clean native iOS interface.
+
+Built as a portfolio-grade project demonstrating production-level Swift, SwiftUI,
+MVVM architecture, and ARKit/RealityKit integration.
+
+---
+
+## 🖼 Screenshots
+
+| Dashboard | Inventory List | Item Detail |
+|:---------:|:--------------:|:-----------:|
+| ![Dashboard](screenshots/home.png) | ![List](screenshots/list.png) | ![Detail](screenshots/detail.png) |
+
+| Add Item | AR Scanner | Settings |
+|:--------:|:----------:|:--------:|
+| ![Add](screenshots/add.png) | ![AR](screenshots/ar.png) | ![Settings](screenshots/settings.png) |
+
+> 📸 See [Screenshot Guide](#-screenshot-guide) below for how to capture these.
+
+---
+
+## ✨ Features
+
+### Inventory Management
+- ➕ Add, edit, and delete inventory items
+- 🏷 Categorize items across 8 predefined categories
+- 🔢 Track quantity with live low-stock warnings
+- 📍 Record physical storage locations
+- 📝 Attach notes to any item
+- 📷 Attach photos from your photo library
+- 🔍 Live search across name, location, category, and notes
+- 🗂 Filter by category with animated chip UI
+- ↕️ Sort by name, date, or quantity
+
+### Augmented Reality
+- 📡 Real-time horizontal surface detection via ARKit
+- 🏷 Place floating 3D inventory label cards in AR space
+- 💾 Save AR placement coordinates to each item
+- 🔄 Update or remove AR placements at any time
+- 🎯 Tap-to-place or use the "Place Here" button
+- 🧭 ARKit coaching overlay for first-time surface finding
+
+### Dashboard
+- 📊 Total item count and low-stock summary
+- ⚠️ Low stock alert list with direct navigation
+- 🕐 Recently added items feed
+- ⚡ Quick action buttons for all core features
+- 🌅 Time-based greeting
+
+### Polish
+- 🌙 Full dark mode and light mode support
+- 💫 Entrance animations and smooth transitions
+- 📳 Haptic feedback on AR placement
+- 🔔 Discard confirmation when leaving unsaved forms
+- 🗑 Swipe-to-delete and swipe-to-edit in lists
+- ↩️ Swipe left on any list item for instant AR placement
+
+---
+
+## 🏗 Architecture
+
+This project strictly follows **MVVM (Model-View-ViewModel)** architecture.
+
+```
+┌─────────────────────────────────────────────────────┐
+│                      VIEWS                          │
+│  HomeView · InventoryListView · AddItemView         │
+│  InventoryDetailView · ARScannerView · SettingsView │
+└────────────────────┬────────────────────────────────┘
+                     │ observes / calls
+┌────────────────────▼────────────────────────────────┐
+│                   VIEWMODELS                        │
+│  InventoryViewModel · ARInventoryViewModel          │
+└────────────────────┬────────────────────────────────┘
+                     │ reads / writes
+┌────────────────────▼────────────────────────────────┐
+│               MODELS + SERVICES                     │
+│  InventoryItem · ARPlacementData                    │
+│  InventoryStorageService                            │
+└─────────────────────────────────────────────────────┘
+```
+
+### Key Principles Applied
+- **Views** never access the storage layer directly
+- **ViewModels** own all business logic and state
+- **Models** are pure value types (`struct`) conforming to `Codable`
+- **Services** are injected as singletons, never instantiated in views
+- **`@EnvironmentObject`** distributes shared state without prop drilling
+
+---
+
+## 🗂 Project Structure
+
+```
+SpatialInventoryApp/
+├── App/
+│   └── SpatialInventoryApp.swift      # Entry point, environment injection
+├── Models/
+│   ├── InventoryItem.swift            # Core data model
+│   └── ARPlacementData.swift          # AR position/orientation model
+├── ViewModels/
+│   ├── InventoryViewModel.swift       # CRUD, filtering, stats
+│   └── ARInventoryViewModel.swift     # AR session, raycasting, placement
+├── Views/
+│   ├── HomeView.swift                 # Dashboard
+│   ├── InventoryListView.swift        # Searchable, filterable list
+│   ├── AddItemView.swift              # Create / edit form
+│   ├── InventoryDetailView.swift      # Full item detail
+│   ├── ARScannerView.swift            # AR camera UI
+│   └── SettingsView.swift             # Settings and about
+├── Components/
+│   ├── InventoryCardView.swift        # Item card (full + compact)
+│   └── SupportingComponents.swift    # Button, chips, empty state, stat cards
+├── Services/
+│   └── InventoryStorageService.swift  # JSON read/write, file management
+└── Utilities/
+    ├── Constants.swift                # Tokens, strings, categories
+    └── Extensions.swift               # View, Color, Date, String, Array
+```
+
+---
+
+## 🛠 Tech Stack
+
+| Technology | Usage |
+|---|---|
+| **Swift 5.9** | Primary language |
+| **SwiftUI** | Entire UI layer |
+| **ARKit** | Surface detection, world tracking, session management |
+| **RealityKit** | 3D entity creation, AR label rendering |
+| **MVVM** | Architecture pattern |
+| **JSON + FileManager** | Local persistence (Documents directory) |
+| **PhotosUI** | Native image picker |
+| **Combine** | Reactive state (via `@Observable`) |
+| **SF Symbols** | All iconography |
+| **simd** | 3D math for AR transforms |
+
+---
+
+## 🚀 Getting Started
+
+### Requirements
+
+| Requirement | Version |
+|---|---|
+| Xcode | 15.0+ |
+| iOS Deployment Target | 17.0+ |
+| Physical Device | Required for AR features |
+| macOS | 13.0+ (for Xcode) |
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/spatial-inventory.git
+cd spatial-inventory
+```
+
+2. **Open in Xcode**
+```bash
+open SpatialInventory.xcodeproj
+```
+
+3. **Configure signing**
+   - Select the project in the Navigator
+   - Go to **Signing & Capabilities**
+   - Set your **Team** to your Apple Developer account
+
+4. **Add required capabilities** (if not already present)
+   - ARKit
+   - Camera Usage Description
+   - Photo Library Usage Description
+
+5. **Run on a physical device**
+   - Select your iPhone from the run destination menu
+   - Press **⌘R** to build and run
+   - AR features require a physical device — the Simulator is not supported
+
+### First Launch
+
+On first launch the inventory will be empty. Tap **Add Item** on the dashboard
+to create your first inventory record, then use **AR Scanner** to place it in your space.
+
+---
+
+## 📐 Data Model
+
+```swift
+struct InventoryItem: Identifiable, Codable {
+    let id: UUID
+    var name: String
+    var category: InventoryCategory   // 8 predefined categories
+    var quantity: Int
+    var location: String
+    var notes: String
+    let dateAdded: Date
+    var dateModified: Date
+    var imageData: String?            // Base64-encoded photo
+    var arPlacement: ARPlacementData? // Optional AR world position
+}
+
+struct ARPlacementData: Codable {
+    let id: UUID
+    let itemID: UUID
+    var positionX, positionY, positionZ: Float   // World-space metres
+    var rotationX, rotationY, rotationZ: Float   // Euler angles (radians)
+    let datePlaced: Date
+}
+```
+
+Data is persisted as a single pretty-printed JSON file at:
+```
+Documents/inventory_items.json
+```
+
+---
+
+## 📸 Screenshot Guide
+
+To capture the screenshots shown above:
+
+1. **Run the app** on a physical iPhone (iPhone 14 Pro or newer recommended)
+2. **Add sample data** — create 4–6 items across different categories
+3. **Capture each screen:**
+
+| Screen | How to reach it |
+|---|---|
+| Dashboard | Launch screen |
+| Inventory List | Tap "View Inventory" |
+| Item Detail | Tap any item card |
+| Add Item | Tap "Add Item" |
+| AR Scanner | Tap "AR Scanner" → point at a flat surface |
+| Settings | Tap the gear icon in the top-left |
+
+4. **Take screenshots** using **Volume Up + Side Button** simultaneously
+5. Find screenshots in **Photos app → Recents**
+6. Add to the `screenshots/` folder in your repo
+
+> **Pro tip:** Use landscape orientation for the AR screenshot — it shows more of the 3D scene.
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] **iCloud Sync** — sync inventory across devices via CloudKit
+- [ ] **Export to CSV/PDF** — generate printable inventory reports
+- [ ] **Barcode / QR Scanning** — scan barcodes to auto-fill item details
+- [ ] **AR Object Recognition** — identify physical objects via Vision framework
+- [ ] **Notifications** — low stock alerts via UserNotifications
+- [ ] **Multi-location Support** — manage inventory across multiple sites
+- [ ] **Team Collaboration** — shared inventory via CloudKit public database
+- [ ] **Analytics Dashboard** — charts for stock trends over time
+- [ ] **Widget Support** — home screen widget showing low stock count
+- [ ] **Siri Shortcuts** — "Hey Siri, add 5 units to Office Chairs"
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+Please follow the existing MVVM structure and code style.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Author
+
+**Your Name**
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+- Portfolio: [yourwebsite.com](https://yourwebsite.com)
+
+---
+
+<p align="center">
+  Built with ❤️ using Swift & SwiftUI
+  <br>
+  <sub>⭐ Star this repo if you found it useful!</sub>
+</p>
